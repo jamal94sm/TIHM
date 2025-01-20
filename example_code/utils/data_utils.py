@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 def concat_slist(slist):
     s = ''
     for vs in slist:
-        s+= str(vs)+',' 
+        s+= str(vs)+','
     return s
 
 def correct_col_type(df,col):
@@ -18,8 +18,8 @@ def correct_col_type(df,col):
             return df[col].astype('category')
     else:
         return df[col]
-    
-    
+
+
 def gen_date_col(df, tcol):
     df['timestamp'] = pd.to_datetime(df['timestamp'])
     df['date'] = df[tcol].dt.date
@@ -35,7 +35,7 @@ def get_personal_df(df,pid):
     if not 'patient_id' in df.columns:
         df = df.reset_index()
     tmp = df.loc[df.patient_id==pid].drop('patient_id',axis=1)
-    
+
     return tmp
 
 
@@ -51,8 +51,8 @@ def min_max_perpatient(df,skip=[]):
                     if max_v > min_v:
                         df.loc[df.patient_id==pid,c] = (ptmp[c].values-min_v)/(max_v-min_v)
                     elif max_v!=0:
-                        df.loc[df.patient_id==pid,c] = 0.5 #only one record 
-    return df   
+                        df.loc[df.patient_id==pid,c] = 0.5 #only one record
+    return df
 
 
 def gen_summary(df):
@@ -67,13 +67,12 @@ def gen_summary(df):
                 sm.loc[stc,'Description'] = 'hash code'
             else:
                 sm.loc[stc,'Description'] = concat_slist(list(vset)[:dl])
-        elif 'datetime' in sm.loc[stc,'Value Type'].lower(): 
+        elif 'datetime' in sm.loc[stc,'Value Type'].lower():
             sm.loc[stc,'Description'] = 'from '+ str(df[stc].min()) + ' to ' + str(str(df[stc].max()))
-        elif 'float' in sm.loc[stc,'Value Type'] or 'int' in sm.loc[stc,'Value Type']: 
+        elif 'float' in sm.loc[stc,'Value Type'] or 'int' in sm.loc[stc,'Value Type']:
             sm.loc[stc,'Description'] = 'min: ' + str(df[stc].min()) + ', max: ' + str(str(df[stc].max()))
-        elif 'bool' in sm.loc[stc,'Value Type']: 
+        elif 'bool' in sm.loc[stc,'Value Type']:
             sm.loc[stc, 'Value Number'] = 2
             sm.loc[stc,'Description'] = 'True or False'
 
-    return sm             
-
+    return sm
