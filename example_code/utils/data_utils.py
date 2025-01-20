@@ -21,6 +21,7 @@ def correct_col_type(df,col):
     
     
 def gen_date_col(df, tcol):
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
     df['date'] = df[tcol].dt.date
     return df
 
